@@ -22,9 +22,24 @@ coping_capacity = lack_capacity_infrastructure + institutional
 total = hazard_exposure + vulnerability_columns + coping_capacity
 
 # Create dictionary of plot title and columns to plot
-plots_dict = {"Hazard Exposure": hazard_exposure, "Vulnerability": vulnerability_columns, "Coping Capacity": coping_capacity, "All Variables":total}
+plots_dict = {
+            "Hazard Exposure": hazard_exposure, 
+            "Human":human_columns,
+            "Natural":natural_columns,
+            "Vulnerability": vulnerability_columns,
+            "Socio-Economic Vulnerability": socio_economic_vulnerability,
+            "Vulnerable Groups": vulnerable_groups,
+            "Institutional": institutional,
+            "Capacity Infrastructure": lack_capacity_infrastructure,
+            "Coping Capacity": coping_capacity, 
+            "All Variables":total}
 
 # Draw the plots
 for title, cols in plots_dict.items():
-    generate_plots(data, cols, title)
+    try:
+        generate_plots(data, cols, title, n_components=2, out_folder="outputs_national")
+    except Exception as e:
+        print(f"Error generating plots for {title}")
+        print(e)
+        pass
 

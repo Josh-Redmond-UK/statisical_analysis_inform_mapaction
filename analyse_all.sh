@@ -1,0 +1,3 @@
+python INFORM_national_indices_analysis.py
+python INFORM_subnational_indices_analysis_latam_carribean.py
+python INFORM_subnational_indices_analysis_niger.py
