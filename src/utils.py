@@ -17,8 +17,6 @@ def parse_data(path='data/INFORM_Risk_2024_v067.xlsx', sheet_name='INFORM Risk 2
     data.replace({'x': 0}, regex=True, inplace=True)
     
     return data
-
-
                 
 
 def create_pca_plots(data, cols, title, n_components=2, out_folder="outputs", risk_column_name='INFORM RISK'):
@@ -29,19 +27,24 @@ def create_pca_plots(data, cols, title, n_components=2, out_folder="outputs", ri
 
     inform_risk = data[risk_column_name]
     data = data[cols]
+    # GET PCA
     pca = PCA(n_components=min(n_components, len(data.columns)))
     pca.fit(data)
-    evr = pca.explained_variance_ratio_[:2]
+    # Variance explained and components
+    evr = pca.explained_variance_ratio_#[:2]
     top_1 = np.argmax(evr)
     top_comp_explains = round(evr[top_1], 2)
-    comps = pca.components_[0:2]
+    comps = pca.components_#[0:2]
 
+    # Get component data to be used in arrows 
     arrow_d = np.transpose(comps)
 
 
-
-    top_1_comp = abs(comps)[top_1]
-    feat_importance_frame = pd.DataFrame(top_1_comp, index=cols, columns=['Importance'])
+    # Return components and variance explained by each feature
+    feat_importance_frame = pd.DataFrame(np.transpose(comps), index=cols, columns=[f'PCA [{i}] importance' for i in range(1, len(comps)+1)])
+    feat_importance_frame = feat_importance_frame.T
+    feat_importance_frame['Total Component Variance Explained'] = evr
+    feat_importance_frame = feat_importance_frame.T
     feat_importance_frame.to_csv(f'{out_folder}/'+title +  " top 1 component explains " f'{top_comp_explains} variance feature importance.csv')
 
     components = np.array(pca.transform(data))
